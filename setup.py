@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as file:
     long_description = file.read()
 
 setup(
-    name="fastapi-custom-logger",
+    name="fastapi-middleware-logger",
     version="0.0.1",
     author="Paul Déchorgnat",
     author_email="paul.dechorgnat@gmail.com",

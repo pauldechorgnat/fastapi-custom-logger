@@ -1,7 +1,7 @@
 from fastapi.testclient import TestClient
 import logging
 import json
-from fastapi_custom_logger.fastapi_custom_logger import FastAPICustomLogger
+from fastapi_custom_logger.fastapi_custom_logger import FastAPIMiddleWareLogger
 
 
 def read_standard_output(text):
@@ -14,7 +14,7 @@ def test_logger(caplog):
     httpx_logger = logging.getLogger("httpx")
     httpx_logger.setLevel(level=logging.CRITICAL)
     caplog.set_level(logging.INFO)
-    app = FastAPICustomLogger(disable_uvicorn_logger=True)
+    app = FastAPIMiddleWareLogger(disable_uvicorn_logger=True)
 
     @app.get("/")
     def get_index():

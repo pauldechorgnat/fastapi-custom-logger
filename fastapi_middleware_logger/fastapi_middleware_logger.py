@@ -69,7 +69,7 @@ def add_custom_logger(
     return app
 
 
-class FastAPICustomLogger(FastAPI):
+class FastAPIMiddleWareLogger(FastAPI):
     def __init__(
         self,
         custom_logger: callable = default_logger,

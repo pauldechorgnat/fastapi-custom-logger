@@ -1,4 +1,4 @@
-from fastapi_custom_logger import FastAPICustomLogger
+from fastapi_custom_logger import FastAPIMiddleWareLogger
 import logging
 
 
@@ -7,7 +7,7 @@ def my_custom_logger(response_status_code, **kwargs):
         logging.error("Some error happened")
 
 
-app = FastAPICustomLogger(custom_logger=my_custom_logger)
+app = FastAPIMiddleWareLogger(custom_logger=my_custom_logger)
 
 
 @app.get("/")
