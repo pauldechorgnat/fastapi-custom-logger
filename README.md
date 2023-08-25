@@ -1,6 +1,6 @@
-# Flask JSON Logger
+# Flask Custom Logger
 
-This library is a very simple tool to simplify JSON Formatting of logs for FastAPI.
+This library is a very simple tool to simplify custom formatting of logs for FastAPI.
 It's almost entirely based on this [answer](https://stackoverflow.com/a/73464007) from SO.
 
 ## Usage
