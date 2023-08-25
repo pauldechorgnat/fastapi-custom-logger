@@ -1,1 +1,1 @@
-from .fastapi_custom_logger import FastAPIMiddleWareLogger  # noqa
+from .fastapi_middleware_logger import FastAPIMiddleWareLogger  # noqa

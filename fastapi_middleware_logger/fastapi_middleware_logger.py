@@ -6,7 +6,11 @@ import json
 
 
 def default_logger(**kwargs):
-    print(json.dumps(kwargs, indent=4))
+    logging.info(json.dumps(kwargs, indent=4))
+
+
+def default_error_logger(**kwargs):
+    logging.info(json.dumps(kwargs, indent=4))
 
 
 async def set_body(request: Request, body: bytes):
@@ -30,6 +34,7 @@ def disable_loggers():
 def add_custom_logger(
     app: FastAPI,
     custom_logger: callable = default_logger,
+    custom_error_logger: callable = default_error_logger,
     disable_uvicorn_logging: bool = True,
 ):
     if disable_uvicorn_logging:
@@ -39,7 +44,20 @@ def add_custom_logger(
     async def middleware_logger(request: Request, call_next):
         request_body = await request.body()
         await set_body(request, request_body)
-        response = await call_next(request)
+        try:
+            response = await call_next(request)
+        except Exception as exc:
+            custom_error_logger(
+                **{
+                    "request_body": request_body.decode("utf-8"),
+                    "request_headers": dict(request.headers),
+                    "request_query_params": dict(request.query_params),
+                    "request_method": request.method,
+                    "request_url": str(request.url),
+                    "error_message": str(exc),
+                },
+            )
+            raise exc
 
         response_body = b""
         async for chunk in response.body_iterator:
@@ -73,6 +91,7 @@ class FastAPIMiddleWareLogger(FastAPI):
     def __init__(
         self,
         custom_logger: callable = default_logger,
+        custom_error_logger: callable = default_error_logger,
         disable_uvicorn_logger: bool = True,
         *args,
         **kwargs,
@@ -81,5 +100,6 @@ class FastAPIMiddleWareLogger(FastAPI):
         add_custom_logger(
             self,
             custom_logger=custom_logger,
+            custom_error_logger=custom_error_logger,
             disable_uvicorn_logging=disable_uvicorn_logger,
         )
