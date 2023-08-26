@@ -6,14 +6,18 @@ import json
 
 
 def default_logger(**kwargs):
+    """Logs all the available information for a normal response"""
     logging.info(json.dumps(kwargs, indent=4))
 
 
 def default_error_logger(**kwargs):
+    """Logs all the available information for a response with error"""
     logging.info(json.dumps(kwargs, indent=4))
 
 
 async def set_body(request: Request, body: bytes):
+    """Utility function to recreate the body of a request"""
+
     async def receive() -> Message:
         return {"type": "http.request", "body": body}
 
@@ -21,6 +25,7 @@ async def set_body(request: Request, body: bytes):
 
 
 def disable_loggers():
+    """Disable UVICORN and FASTAPI loggers by setting them to CRITICAL levels"""
     uvicorn_error = logging.getLogger("uvicorn.error")
     uvicorn_error.setLevel(level=logging.CRITICAL)
     uvicorn_access = logging.getLogger("uvicorn.access")
@@ -36,7 +41,22 @@ def add_custom_logger(
     custom_logger: callable = default_logger,
     custom_error_logger: callable = default_error_logger,
     disable_uvicorn_logging: bool = True,
-):
+) -> FastAPI:
+    """Function to add custom loggers to a FastAPI application
+
+    Args:
+        app (FastAPI): a FastAPI application
+        custom_logger (callable, optional): function used to print logs when working normally.
+            Defaults to `default_logger`.
+        custom_error_logger (callable, optional): funtion used to print logs when an error occurs.
+            Defaults to `default_error_logger`.
+        disable_uvicorn_logging (bool, optional): if True, usual uvicorn and FastAPI logs are inhibited.
+            Defaults to True.
+
+
+    Returns:
+        FastAPI: FastAPI app with the custom loggers
+    """
     if disable_uvicorn_logging:
         disable_loggers()
 
@@ -88,6 +108,8 @@ def add_custom_logger(
 
 
 class FastAPIMiddleWareLogger(FastAPI):
+    """Class that inherits from FastAPI and allows to add custom loggers"""
+
     def __init__(
         self,
         custom_logger: callable = default_logger,
