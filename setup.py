@@ -8,10 +8,11 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 setup(
     name="fastapi-middleware-logger",
-    version="0.0.4",
+    version="0.0.5",
     author="Paul Déchorgnat",
     author_email="paul.dechorgnat@gmail.com",
     url="https://github.com/pauldechorgnat/fastapi-custom-logger",
+    packages=["fastapi_middleware_logger"],
     description="Simple library to customize logger for FastAPI",
     license="MIT",
     include_package_data=True,
