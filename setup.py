@@ -8,7 +8,7 @@ with open("README.md", "r", encoding="utf-8") as file:
 
 setup(
     name="fastapi-middleware-logger",
-    version="0.0.3",
+    version="0.0.4",
     author="Paul Déchorgnat",
     author_email="paul.dechorgnat@gmail.com",
     url="https://github.com/pauldechorgnat/fastapi-custom-logger",
